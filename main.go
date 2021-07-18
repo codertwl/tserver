@@ -11,7 +11,7 @@ import (
 
         //      "google.golang.org/grpc/reflection"
         "github.com/gin-gonic/gin"
-        "proto/pb"
+        "github.com/codertwl/tserverpub/pb"
 )
 
 type server struct{}
