@@ -3,14 +3,13 @@ package main
 import (
         "errors"
         "fmt"
+        "github.com/codertwl/tserver/core"
         "golang.org/x/net/context"
         "google.golang.org/grpc"
         "net"
         "net/http"
         "sync"
 
-        //      "google.golang.org/grpc/reflection"
-        "github.com/gin-gonic/gin"
         "github.com/codertwl/tserverpub/pb"
 )
 
@@ -43,7 +42,7 @@ func RegisterGrpc(host string) {
         }
 }
 
-func Ping(ctx *gin.Context) {
+func Ping(ctx *core.Context) {
         fmt.Println("ping...")
 }
 
@@ -55,9 +54,9 @@ func RegisterGin(host string) {
         }
         fmt.Println(addr)
 
-        g := gin.New()
-        g.POST("/ping", Ping)
-        s := http.Server{Handler: g}
+        ht := core.NewHttpServer()
+        ht.POST("/ping", Ping)
+        s := http.Server{Handler: ht}
         s.Serve(lis)
         if err != nil {
                 fmt.Printf("failed to serve: %v", err)
@@ -200,7 +199,7 @@ func main() {
         var wg sync.WaitGroup
         wg.Add(2)
         go RegisterGrpc(":8972")
-        go RegisterGin(":8973")
+        go RegisterGin("0.0.0.0:8973")
         wg.Wait()
 }
 
